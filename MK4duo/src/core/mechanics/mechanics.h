@@ -413,6 +413,8 @@ class Mechanics {
   #include "delta/delta_mechanics.h"
 #elif IS_SCARA
   #include "scara/scara_mechanics.h"
+#elif IS_RESIN 
+  #include "resin/resin_mechanics.h"
 #endif
 
 #endif /* _MECHANICS_H_ */

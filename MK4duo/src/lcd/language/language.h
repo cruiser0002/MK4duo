@@ -73,6 +73,8 @@
   #define MACHINE_TYPE                      "Scara"
 #elif MECH(MUVE3D)
   #define MACHINE_TYPE                      "Muve3D"
+#elif MECH(RESIN)
+  #define MACHINE_TYPE                      "Resin"
 #endif  
 
 #define MSG_ENQUEUEING                      "enqueueing \""

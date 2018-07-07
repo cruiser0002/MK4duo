@@ -84,6 +84,8 @@ typedef int8_t    pin_t;
     #include "Configuration_Scara.h"
   #elif IS_MUVE3D
     #include "Configuration_Muve3D.h"
+  #elif IS_RESIN 
+    #include "Configuration_Resin.h"
   #endif
 
   #include "Configuration_Temperature.h"
