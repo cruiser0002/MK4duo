@@ -54,12 +54,12 @@
 // #define HIGH_TO_FIRE
 
 // Uncomment the following if your laser pwm pin (not the power pin) needs to be inverted.
-//#define LASER_PWM_INVERT
+#define LASER_PWM_INVERT
 
 // The following defines select which G codes tell the laser to fire. It's OK to uncomment more than one.
-#define LASER_FIRE_SPINDLE    // fire the laser on M3, extinguish on M5
+//#define LASER_FIRE_SPINDLE    // fire the laser on M3, extinguish on M5
 //#define LASER_FIRE_G1       // fire the laser on a G1 move, extinguish when the move ends
-//#define LASER_FIRE_E        // fire the laser when the E axis moves
+#define LASER_FIRE_E        // fire the laser when the E axis moves
 
 // Raster mode enables the laser to etch bitmap data at high speeds. Increases command buffer size substantially.
 //#define LASER_RASTER
@@ -77,8 +77,8 @@
 // Uncomment the following line to enable cubic bezier curve movement with the G5 code
 // #define G5_BEZIER
 
-#define LASER_WATTS 40.0
+#define LASER_WATTS 0.05
 #define LASER_DIAMETER 0.1        // milimeters
-#define LASER_FOCAL_HEIGHT 74.50  // z axis position at which the laser is focused
+#define LASER_FOCAL_HEIGHT 280  // z axis position at which the laser is focused
 
 #endif /* _CONFIGURATION_LASER_H_ */

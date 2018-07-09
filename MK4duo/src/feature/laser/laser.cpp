@@ -106,7 +106,7 @@
   }
 
   void Laser::fire(uint8_t intensity/*=255*/) {
-
+    //#if ENABLED(XXX)
     laser.firing = LASER_ON;
     laser.last_firing = micros(); // microseconds of last laser firing
 
@@ -120,11 +120,12 @@
       HAL::analogWrite(LASER_PWM_PIN, intensity); // Range 0-255
       HAL::digitalWrite(LASER_PWR_PIN, LASER_ARM);
     #endif
-
+    //#endif
     if (laser.diagnostics) SERIAL_EM("Laser fired");
   }
 
   void Laser::extinguish() {
+    //#if ENABLED(XXX)
     if (laser.firing == LASER_ON) {
       laser.firing = LASER_OFF;
 
@@ -150,6 +151,7 @@
       if (laser.diagnostics)
         SERIAL_EM("Laser extinguished");
     }
+    //#endif
   }
 
   void Laser::set_mode(uint8_t mode) {

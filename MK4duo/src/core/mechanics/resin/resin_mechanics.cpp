@@ -40,7 +40,21 @@
               Resin_Mechanics::max_length[XYZ]    = { X_MAX_LENGTH, Y_MAX_LENGTH, Z_MAX_LENGTH };
 
   /** Public Function */
-  void Resin_Mechanics::init() { }
+  void Resin_Mechanics::init() {
+
+    
+    pinMode(CASE_OPEN_PIN, INPUT);
+    //digitalWrite(CASE_OPEN_PIN, HIGH);
+    pinMode(CASE_OPEN2_PIN, INPUT);
+    //digitalWrite(CASE_OPEN2_PIN, HIGH);
+    pinMode(GALVO_SS_PIN, OUTPUT);
+    WRITE(GALVO_SS_PIN, HIGH);
+    SPI.setDataMode(SPI_MODE0);
+    SPI.setBitOrder(MSBFIRST);
+    SPI.setClockDivider(SPI_CLOCK_DIV2); // Run at 8 MHz 
+    // start the SPI library:
+    SPI.begin();
+  }
 
   void Resin_Mechanics::sync_plan_position_mech_specific() {
     sync_plan_position();
@@ -132,6 +146,12 @@
    * Returns true if current_position[] was set to destination[]
    */
   bool Resin_Mechanics::prepare_move_to_destination_mech_specific() {
+    #if ENABLED(LASER) && ENABLED(LASER_FIRE_E)
+      if (current_position[E_AXIS] < destination[E_AXIS] && ((current_position[X_AXIS] != destination [X_AXIS]) || (current_position[Y_AXIS] != destination [Y_AXIS])))
+        laser.status = LASER_ON;
+      else
+        laser.status = LASER_OFF;
+    #endif
     line_to_destination(MMS_SCALED(feedrate_mm_s));
     return false;
   }

@@ -65,6 +65,13 @@ class Stepper {
 
   private: /** Private Parameters */
 
+    #if ENABLED(RESIN)
+       static uint8_t resin_spi_part1;
+       static uint8_t resin_spi_part2;
+       static uint16_t x_dac_position;
+       static uint16_t y_dac_position;
+    #endif
+
     static block_t* current_block;          // A pointer to the block currently being traced
 
     static uint8_t  last_direction_bits,    // The next stepping-bits to be output

@@ -93,6 +93,13 @@ uint32_t  Stepper::maximum_rate     = 0,
           Stepper::direction_delay  = 0;
 
 /** Private Parameters */
+
+#if ENABLED(RESIN)
+  uint8_t Stepper::resin_spi_part1 = 0;
+  uint8_t Stepper::resin_spi_part2 = 0;
+  uint16_t Stepper::y_dac_position = 0;
+  uint16_t Stepper::x_dac_position = 0;
+#endif
 block_t* Stepper::current_block = NULL;  // A pointer to the block currently being traced
 
 uint8_t Stepper::last_direction_bits  = 0,
@@ -1719,21 +1726,66 @@ uint32_t Stepper::block_phase_step() {
 
 void Stepper::pulse_tick_start() {
 
-  #if HAS_X_STEP
+  #if ENABLED(RESIN)
+
+
     delta_error[X_AXIS] += advance_dividend[X_AXIS];
     if (delta_error[X_AXIS] >= 0) {
-      start_X_step();
+      
+      x_dac_position = count_position[X_AXIS]*10 + 0x8000;
+
+      resin_spi_part1 = (uint8_t)((x_dac_position >> 8) & 0xFF);
+      resin_spi_part2 = (uint8_t)(x_dac_position & 0xFF);
+
+      WRITE(GALVO_SS_PIN, LOW);
+
+      SPI.transfer(0x30);
+      SPI.transfer(resin_spi_part1);
+      SPI.transfer(resin_spi_part2);
+      WRITE(GALVO_SS_PIN, HIGH);
+
       count_position[X_AXIS] += count_direction[X_AXIS];
     }
-  #endif
 
-  #if HAS_Y_STEP
     delta_error[Y_AXIS] += advance_dividend[Y_AXIS];
     if (delta_error[Y_AXIS] >= 0) {
-      start_Y_step();
+      
+      y_dac_position = count_position[Y_AXIS]*10 + 0x8000;
+
+      resin_spi_part1 = (uint8_t)((y_dac_position >> 8) & 0xFF);
+      resin_spi_part2 = (uint8_t)(y_dac_position & 0xFF);
+
+      WRITE(GALVO_SS_PIN, LOW);
+
+      SPI.transfer(0x31);
+      SPI.transfer(resin_spi_part1);
+      SPI.transfer(resin_spi_part2);
+      WRITE(GALVO_SS_PIN, HIGH);
+
       count_position[Y_AXIS] += count_direction[Y_AXIS];
     }
-  #endif
+
+
+
+
+  #else
+    #if HAS_X_STEP
+      delta_error[X_AXIS] += advance_dividend[X_AXIS];
+      if (delta_error[X_AXIS] >= 0) {
+        start_X_step();
+        count_position[X_AXIS] += count_direction[X_AXIS];
+      }
+    #endif
+
+    #if HAS_Y_STEP
+      delta_error[Y_AXIS] += advance_dividend[Y_AXIS];
+      if (delta_error[Y_AXIS] >= 0) {
+        start_Y_step();
+        count_position[Y_AXIS] += count_direction[Y_AXIS];
+      }
+    #endif
+  #endif //RESIN
+
 
   #if HAS_Z_STEP
     delta_error[Z_AXIS] += advance_dividend[Z_AXIS];
@@ -1742,6 +1794,7 @@ void Stepper::pulse_tick_start() {
       count_position[Z_AXIS] += count_direction[Z_AXIS];
     }
   #endif
+
 
   // Pulse E/Mixing extruders
   #if ENABLED(LIN_ADVANCE)

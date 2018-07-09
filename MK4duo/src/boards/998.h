@@ -31,11 +31,22 @@
 #define ORIG_Y_ENABLE_PIN          4
 #define ORIG_Y_CS_PIN              NoPin
 
+/*
+MS1 MS2 MS3 Microstep Resolution
+Low Low Low Full step
+High  Low Low Half step
+Low High  Low Quarter step
+High  High  Low Eighth step
+High  High  High  Sixteenth step
+*/
 //###Z_AXIS
 #define ORIG_Z_STEP_PIN            24
 #define ORIG_Z_DIR_PIN             22
 #define ORIG_Z_ENABLE_PIN          32
 #define ORIG_Z_CS_PIN              NoPin
+#define Z_MS1                 30
+#define Z_MS2                 28
+#define Z_MS3                 26
 
 //###EXTRUDER_0
 #define ORIG_E0_STEP_PIN           6
@@ -155,9 +166,14 @@
 #define SUICIDE_PIN                NoPin
 
 //###LASER
-#define ORIG_LASER_PWR_PIN          5
-#define ORIG_LASER_PWM_PIN          6
+#define ORIG_LASER_PWR_PIN          2
+#define ORIG_LASER_PWM_PIN		   NoPin
+
 #define GALVO_SS_PIN               48 //A7 = 61 //new shield 53
 #define CASE_OPEN_PIN              27 //A0 = 54 //new shield A2 (56), A3 (57)
 #define CASE_OPEN2_PIN             29
+
+//###UNKNOWN_PINS
+#define MAX6675_SS_PIN             67
+//@@@
 

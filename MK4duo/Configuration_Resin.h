@@ -60,6 +60,7 @@
 #define _CONFIGURATION_RESIN_H_
 
 #define KNOWN_MECH
+#define RESIN
 
 /*****************************************************************************************
  *********************************** Machine name ****************************************
@@ -106,10 +107,10 @@
  *****************************************************************************************/
 #define X_MIN_ENDSTOP_LOGIC   false   // set to true to invert the logic of the endstop.
 #define Y_MIN_ENDSTOP_LOGIC   false   // set to true to invert the logic of the endstop.
-#define Z_MIN_ENDSTOP_LOGIC   false   // set to true to invert the logic of the endstop.
+#define Z_MIN_ENDSTOP_LOGIC   true   // set to true to invert the logic of the endstop.
 #define X_MAX_ENDSTOP_LOGIC   false   // set to true to invert the logic of the endstop.
 #define Y_MAX_ENDSTOP_LOGIC   false   // set to true to invert the logic of the endstop.
-#define Z_MAX_ENDSTOP_LOGIC   true   // set to true to invert the logic of the endstop.
+#define Z_MAX_ENDSTOP_LOGIC   false   // set to true to invert the logic of the endstop.
 #define X2_MIN_ENDSTOP_LOGIC  false   // set to true to invert the logic of the endstop.
 #define Y2_MIN_ENDSTOP_LOGIC  false   // set to true to invert the logic of the endstop.
 #define Z2_MIN_ENDSTOP_LOGIC  false   // set to true to invert the logic of the endstop.
@@ -341,11 +342,11 @@
  * Travel limits after homing (units are in mm)                                          *
  *                                                                                       *
  *****************************************************************************************/
-#define X_MAX_POS 200
-#define X_MIN_POS 0
-#define Y_MAX_POS 200
-#define Y_MIN_POS 0
-#define Z_MAX_POS 200
+#define X_MAX_POS 50
+#define X_MIN_POS -50
+#define Y_MAX_POS 50
+#define Y_MIN_POS -50
+#define Z_MAX_POS 120
 #define Z_MIN_POS 0
 #define E_MIN_POS 0
 /*****************************************************************************************/
@@ -563,7 +564,7 @@
  *                                                                                       *
  *****************************************************************************************/
 // Default steps per unit               X,  Y,    Z,  E0...(per extruder)
-#define DEFAULT_AXIS_STEPS_PER_UNIT   {80, 80, 804, 625, 625, 625, 625}
+#define DEFAULT_AXIS_STEPS_PER_UNIT   {65, 65, 804, 625, 625, 625, 625}
 /*****************************************************************************************/
 
 

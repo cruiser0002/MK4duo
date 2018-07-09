@@ -1796,7 +1796,7 @@
  * Check also Configuration_Laser.h                                       *
  *                                                                        *
  **************************************************************************/
-//#define LASER
+#define LASER
 /**************************************************************************/
 
 
@@ -1911,7 +1911,7 @@
  *   15000 : Maximum for TB6560 stepper driver                                         *
  *                                                                                     *
  ***************************************************************************************/
-#define MAXIMUM_STEPPER_RATE 500000
+#define MAXIMUM_STEPPER_RATE 5000
 /***************************************************************************************/
 
 
@@ -1967,7 +1967,7 @@
 #define X2_MICROSTEPS 16
 #define Y_MICROSTEPS  16
 #define Y2_MICROSTEPS 16
-#define Z_MICROSTEPS  16
+#define Z_MICROSTEPS  4
 #define Z2_MICROSTEPS 16
 #define E0_MICROSTEPS 16
 #define E1_MICROSTEPS 16
