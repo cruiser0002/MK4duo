@@ -37,7 +37,16 @@
   const float Resin_Mechanics::base_max_pos[XYZ]  = { X_MAX_POS, Y_MAX_POS, Z_MAX_POS },
               Resin_Mechanics::base_min_pos[XYZ]  = { X_MIN_POS, Y_MIN_POS, Z_MIN_POS },
               Resin_Mechanics::base_home_pos[XYZ] = { X_HOME_POS, Y_HOME_POS, Z_HOME_POS },
-              Resin_Mechanics::max_length[XYZ]    = { X_MAX_LENGTH, Y_MAX_LENGTH, Z_MAX_LENGTH };
+              Resin_Mechanics::max_length[XYZ]    = { X_MAX_LENGTH, Y_MAX_LENGTH, Z_MAX_LENGTH },
+
+              Resin_Mechanics::resin_segments_per_second      = RESIN_SEGMENTS_PER_SECOND,
+              
+              Resin_Mechanics::resin_z0                       = RESIN_Z0,
+              Resin_Mechanics::resin_z0_squared               = RESIN_Z0*RESIN_Z0,
+              Resin_Mechanics::resin_r                        = RESIN_R,
+              Resin_Mechanics::resin_size_2_deg               = RESIN_SIZE_2_ANGLE*RESIN_RAD_2_DEG;
+  
+  float Resin_Mechanics::resin[XYZ]                    = { 0.0 };
 
   /** Public Function */
   void Resin_Mechanics::init() {
@@ -146,14 +155,151 @@
    * Returns true if current_position[] was set to destination[]
    */
   bool Resin_Mechanics::prepare_move_to_destination_mech_specific() {
-    #if ENABLED(LASER) && ENABLED(LASER_FIRE_E)
-      if (current_position[E_AXIS] < destination[E_AXIS] && ((current_position[X_AXIS] != destination [X_AXIS]) || (current_position[Y_AXIS] != destination [Y_AXIS])))
-        laser.status = LASER_ON;
-      else
-        laser.status = LASER_OFF;
-    #endif
+
+    if (current_position[E_AXIS] < destination[E_AXIS] && ((current_position[X_AXIS] != destination [X_AXIS]) || (current_position[Y_AXIS] != destination [Y_AXIS])))
+      laser.status = LASER_ON;
+    else
+      laser.status = LASER_OFF;
+
     line_to_destination(MMS_SCALED(feedrate_mm_s));
     return false;
+
+    /*
+      void Mechanics::line_to_destination(float fr_mm_s) {
+        planner.buffer_line(destination[X_AXIS], destination[Y_AXIS], destination[Z_AXIS], destination[E_AXIS], fr_mm_s, tools.active_extruder);
+      }
+    */
+
+    // Get the top feedrate of the move in the XY plane
+    const float _feedrate_mm_s = MMS_SCALED(feedrate_mm_s);
+
+    // Get the cartesian distances moved in XYZE
+    const float difference[XYZE] = {
+      destination[X_AXIS] - current_position[X_AXIS],
+      destination[Y_AXIS] - current_position[Y_AXIS],
+      destination[Z_AXIS] - current_position[Z_AXIS],
+      destination[E_AXIS] - current_position[E_AXIS]
+    };
+
+    // If the move is only in Z/E don't split up the move
+    if (!difference[X_AXIS] && !difference[Y_AXIS]) {
+      planner.buffer_line_kinematic(destination, _feedrate_mm_s, tools.active_extruder);
+      return false; // caller will update current_position
+    }
+
+    // Fail if attempting move outside printable radius
+    if (endstops.isSoftEndstop() && !mechanics.position_is_reachable(destination[X_AXIS], destination[Y_AXIS])) return true;
+
+    // Get the linear distance in XYZ
+    float cartesian_mm = SQRT(sq(difference[X_AXIS]) + sq(difference[Y_AXIS]) + sq(difference[Z_AXIS]));
+
+    // If the move is very short, check the E move distance
+    if (UNEAR_ZERO(cartesian_mm)) cartesian_mm = ABS(difference[E_AXIS]);
+
+    // No E move either? Game over.
+    if (UNEAR_ZERO(cartesian_mm)) return true;
+
+    // Minimum number of seconds to move the given distance
+    const float seconds = cartesian_mm / _feedrate_mm_s;
+
+    // The number of segments-per-second times the duration
+    // gives the number of segments we should produce
+    uint16_t segments = resin_segments_per_second * seconds;
+
+    // At least one segment is required
+    NOLESS(segments, 1U);
+
+    // The approximate length of each segment
+    const float inv_segments = RECIPROCAL(segments),
+                cartesian_segment_mm = cartesian_mm * inv_segments,
+                segment_distance[XYZE] = {
+                  difference[X_AXIS] * inv_segments,
+                  difference[Y_AXIS] * inv_segments,
+                  difference[Z_AXIS] * inv_segments,
+                  difference[E_AXIS] * inv_segments
+                };
+
+
+    // Get the current position as starting point
+    float raw[XYZ];
+    COPY_ARRAY(raw, current_position);
+
+    // Calculate and execute the segments
+    while (--segments) {
+
+      printer.check_periodical_actions();
+
+      LOOP_XYZE(i) raw[i] += segment_distance[i];
+      calculate_resin(raw);
+
+
+      if (!planner.buffer_line(resin[X_AXIS], resin[Y_AXIS], resin[Z_AXIS], raw[E_AXIS], _feedrate_mm_s, tools.active_extruder, cartesian_segment_mm))
+        break;
+
+    }
+
+    planner.buffer_line_kinematic(destination, _feedrate_mm_s, tools.active_extruder, cartesian_segment_mm);
+
+    return false; // caller will update current_position
+  }
+
+
+  float Resin_Mechanics::fast_atan(const float x) {
+    float abs_x = fabs(x);
+    return 3.14159265/4*x - x*(abs_x-1)*(0.2447 + 0.0663*abs_x);
+  }
+
+  #if ENABLED(__AVR__)
+
+    /**
+     * Fast inverse SQRT from Quake III Arena
+     * See: https://en.wikipedia.org/wiki/Fast_inverse_square_root
+     
+    float Resin_Mechanics::Q_rsqrt(float number) {
+      long i;
+      float x2, y;
+      const float threehalfs = 1.5f;
+      x2 = number * 0.5f;
+      y  = number;
+      i  = * ( long * ) &y;                         // evil floating point bit level hacking
+      i  = 0x5F3759DF - ( i >> 1 );
+      y  = * ( float * ) &i;
+      y  = y * ( threehalfs - ( x2 * y * y ) );     // 1st iteration
+      // y  = y * ( threehalfs - ( x2 * y * y ) );  // 2nd iteration, this can be removed
+      return y;
+    }
+    */
+
+
+    float Resin_Mechanics::fast_sqrt(const float x) {
+      float xhalf = 0.5*x;
+      union {
+          float x;
+          long i;
+      } u;
+      
+      u.x = x;
+      u.i = 0x5F3759DF - (u.i>>1);
+      return x*u.x*(1.5-xhalf*sq(u.x));
+    }
+
+  #endif
+
+  void Resin_Mechanics::calculate_resin(const float logical[XYZ]){
+    
+    float beta_y = fast_atan((logical[Y_AXIS])/resin_z0);
+    float beta_x = fast_atan((logical[X_AXIS])/(resin_r+fast_sqrt(logical[Y_AXIS]*logical[Y_AXIS] + resin_z0_squared)));
+    
+      
+    resin[X_AXIS] = beta_x*resin_size_2_deg;
+    resin[Y_AXIS] = beta_y*resin_size_2_deg;
+    resin[Z_AXIS] = logical[Z_AXIS];
+    
+    /*
+    resin[X_AXIS] = logical[X_AXIS];
+    resin[Y_AXIS] = logical[Y_AXIS];
+    resin[Z_AXIS] = logical[Z_AXIS];
+    */
   }
 
   void Resin_Mechanics::homeaxis(const AxisEnum axis) {

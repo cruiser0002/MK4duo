@@ -42,7 +42,14 @@
       static const float  base_max_pos[XYZ],
                           base_min_pos[XYZ],
                           base_home_pos[XYZ],
-                          max_length[XYZ];
+                          max_length[XYZ],
+                          resin_segments_per_second,
+                          resin_z0,
+                          resin_z0_squared,
+                          resin_r,
+                          resin_size_2_deg;
+
+      static float resin[XYZ];
 
     public: /** Public Function */
 
@@ -99,6 +106,14 @@
        */
       static bool prepare_move_to_destination_resin();
 
+
+      static float fast_atan(const float x);
+      
+      #if ENABLED(__AVR__)
+        static float fast_sqrt(const float x);
+      #endif  
+
+      static void calculate_resin(const float logical[XYZ]);
 
   };
 

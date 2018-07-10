@@ -673,12 +673,12 @@
 
 //Resin values
 #define RESIN_SEGMENTS_PER_SECOND  1000
-#define Z0_RESIN              150 //Previous value 140
-#define R_RESIN               7.76    //New galvo = 7.76 
+#define RESIN_Z0              150 //Previous value 140. Total focal distance. Distance from laser to mirror to print bed.
+#define RESIN_R               7.76    //New galvo = 7.76. Spacing between X and Y mirror centers.
+#define RESIN_MAX_ANGLE		  35.0
 
-
-#define SIZE_2_ANGLE_RESIN    100.0/35.0
-#define RAD_TO_DEG_RESIN      180/3.14159265
+#define RESIN_SIZE_2_ANGLE    (X_MAX_POS - X_MIN_POS)/RESIN_MAX_ANGLE
+#define RESIN_RAD_2_DEG       180/3.14159265
 
 
 #endif /* _CONFIGURATION_RESIN_H_ */
