@@ -51,7 +51,7 @@
 //#define INTENSITY_IN_BYTE
 
 // Uncomment the following if your laser firing pin (not the PWM pin) for two pin control requires a HIGH signal to fire rather than a low (eg Red Sail M300 RS 3040)
-// #define HIGH_TO_FIRE
+#define HIGH_TO_FIRE
 
 // Uncomment the following if your laser pwm pin (not the power pin) needs to be inverted.
 #define LASER_PWM_INVERT

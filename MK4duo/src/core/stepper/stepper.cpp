@@ -1764,9 +1764,17 @@ void Stepper::pulse_tick_start() {
 
       count_position[Y_AXIS] += count_direction[Y_AXIS];
     }
-
-
-
+/*
+    if(current_block->steps[E_AXIS] > 0) //  && count_direction[E_AXIS] > 0
+      WRITE(LASER_FIRING_PIN, HIGH);
+    else
+      WRITE(LASER_FIRING_PIN, LOW);
+*/
+  
+  if(current_block->laser_status == LASER_ON)
+    WRITE(LASER_FIRING_PIN, HIGH);
+  else
+    WRITE(LASER_FIRING_PIN, LOW);
 
   #else
     #if HAS_X_STEP

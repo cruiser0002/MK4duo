@@ -44,9 +44,9 @@ High  High  High  Sixteenth step
 #define ORIG_Z_DIR_PIN             22
 #define ORIG_Z_ENABLE_PIN          32
 #define ORIG_Z_CS_PIN              NoPin
-#define Z_MS1                 30
-#define Z_MS2                 28
-#define Z_MS3                 26
+#define Z_MS1              		   30
+#define Z_MS2               	   28
+#define Z_MS3             		   26
 
 //###EXTRUDER_0
 #define ORIG_E0_STEP_PIN           6
@@ -167,7 +167,8 @@ High  High  High  Sixteenth step
 
 //###LASER
 #define ORIG_LASER_PWR_PIN          2
-#define ORIG_LASER_PWM_PIN		   NoPin
+#define ORIG_LASER_PWM_PIN		   41
+#define LASER_FIRING_PIN		   45	
 
 #define GALVO_SS_PIN               48 //A7 = 61 //new shield 53
 #define CASE_OPEN_PIN              27 //A0 = 54 //new shield A2 (56), A3 (57)

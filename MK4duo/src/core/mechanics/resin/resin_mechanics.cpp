@@ -56,6 +56,8 @@
     //digitalWrite(CASE_OPEN_PIN, HIGH);
     pinMode(CASE_OPEN2_PIN, INPUT);
     //digitalWrite(CASE_OPEN2_PIN, HIGH);
+    pinMode(LASER_FIRING_PIN, OUTPUT);
+    digitalWrite(LASER_FIRING_PIN, LOW);
     pinMode(GALVO_SS_PIN, OUTPUT);
     WRITE(GALVO_SS_PIN, HIGH);
     SPI.setDataMode(SPI_MODE0);

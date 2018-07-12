@@ -672,7 +672,7 @@
 
 
 //Resin values
-#define RESIN_SEGMENTS_PER_SECOND  1000
+#define RESIN_SEGMENTS_PER_SECOND  100
 #define RESIN_Z0              150 //Previous value 140. Total focal distance. Distance from laser to mirror to print bed.
 #define RESIN_R               7.76    //New galvo = 7.76. Spacing between X and Y mirror centers.
 #define RESIN_MAX_ANGLE		  35.0
@@ -682,3 +682,18 @@
 
 
 #endif /* _CONFIGURATION_RESIN_H_ */
+
+
+
+
+/*
+Bugs:
+laser is on while printer is connecting - fixed, was due to reset-on-serial-connect behavior, pins were left tristated, provide hardware pull up/down as appropriate
+
+
+Features to implement:
+software microstep
+eye protection
+laser pwm
+
+*/
