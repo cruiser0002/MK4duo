@@ -65,6 +65,10 @@
     SPI.setClockDivider(SPI_CLOCK_DIV2); // Run at 8 MHz 
     // start the SPI library:
     SPI.begin();
+
+    #if HAS_MICROSTEPS
+      //stepper.microstep_mode(2, 4);
+    #endif
   }
 
   void Resin_Mechanics::sync_plan_position_mech_specific() {

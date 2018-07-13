@@ -689,7 +689,7 @@
 /*
 Bugs:
 laser is on while printer is connecting - fixed, was due to reset-on-serial-connect behavior, pins were left tristated, provide hardware pull up/down as appropriate
-
+cold extrusion - fix with M302 S0 command in slic3r
 
 Features to implement:
 software microstep
