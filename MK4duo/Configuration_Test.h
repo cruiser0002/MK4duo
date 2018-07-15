@@ -56,8 +56,8 @@
  * Pins-settings can be found in "Configuration_Pins.h"
  */
 
-#ifndef _CONFIGURATION_CARTESIAN_H_
-#define _CONFIGURATION_CARTESIAN_H_
+#ifndef _CONFIGURATION_TEST_H_
+#define _CONFIGURATION_TEST_H_
 
 #define KNOWN_MECH
 

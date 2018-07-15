@@ -690,10 +690,11 @@
 Bugs:
 laser is on while printer is connecting - fixed, was due to reset-on-serial-connect behavior, pins were left tristated, provide hardware pull up/down as appropriate
 cold extrusion - fix with M302 S0 command in slic3r
+excessive serial port noise too many serial command errors
 
 Features to implement:
 software microstep
-eye protection
+eye protection use HAS_DOOR_OPEN
 laser pwm
-
+calibration
 */

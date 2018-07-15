@@ -98,6 +98,7 @@
 #define IS_MUVE3D     (MECH(MUVE3D))
 
 #define IS_RESIN      (MECH(RESIN))
+#define IS_TEST	      (MECH(TEST))
 
 // Macros to make a string from a macro
 #define STRINGIFY_(M) #M

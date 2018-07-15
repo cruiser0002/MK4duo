@@ -40,6 +40,9 @@
     const bool no_wait_for_cooling = parser.seen('S');
     if (no_wait_for_cooling || parser.seen('R')) {
       heaters[BED_INDEX].target_temperature = parser.value_celsius();
+    #if ENABLED(RESIN)
+      heaters[BED_INDEX].current_temperature = (float)heaters[BED_INDEX].target_temperature;
+    #endif
     }
     else return;
 

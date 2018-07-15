@@ -51,7 +51,7 @@
   /** Public Function */
   void Resin_Mechanics::init() {
 
-    
+    pinMode(45, INPUT);
     pinMode(CASE_OPEN_PIN, INPUT);
     //digitalWrite(CASE_OPEN_PIN, HIGH);
     pinMode(CASE_OPEN2_PIN, INPUT);

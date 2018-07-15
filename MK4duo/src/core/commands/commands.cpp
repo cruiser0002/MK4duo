@@ -115,6 +115,10 @@ void Commands::get_serial() {
    * Loop while serial characters are incoming and the buffer_ring is not full
    */
   while (buffer_lenght < BUFSIZE && HAL::serialByteAvailable()) {
+
+#if ENABLED(RESIN)
+    WRITE(45, HIGH);
+    #endif
     int c;
 
     last_command_watch.start();
@@ -227,6 +231,10 @@ void Commands::get_serial() {
       if (!serial_comment_mode) serial_line_buffer[serial_count++] = serial_char;
     }
   }
+
+  #if ENABLED(RESIN)
+    WRITE(45, LOW);
+    #endif
 }
 
 #if HAS_SDSUPPORT

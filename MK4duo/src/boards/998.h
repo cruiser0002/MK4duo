@@ -134,7 +134,7 @@ High  High  High  Sixteenth step
 #define ORIG_COOLER_PIN            NoPin
 
 //###TEMPERATURE
-#define ORIG_TEMP_0_PIN            66 //12
+#define ORIG_TEMP_0_PIN            11 //12
 #define ORIG_TEMP_1_PIN            NoPin
 #define ORIG_TEMP_2_PIN            NoPin
 #define ORIG_TEMP_3_PIN            NoPin
@@ -175,6 +175,6 @@ High  High  High  Sixteenth step
 #define CASE_OPEN2_PIN             29
 
 //###UNKNOWN_PINS
-#define MAX6675_SS_PIN             67
+//#define MAX6675_SS_PIN             66
 //@@@
 

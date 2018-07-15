@@ -75,6 +75,7 @@
 #define BOARD_MEGATRONICS_3    703    // Megatronics v3.0
 #define BOARD_LEAPFROG         999    // Leapfrog
 #define BOARD_RESIN			   998    // ResinShield
+#define BOARD_TEST			   997	  // Testing
 
 /**
  * ATmega1281, ATmega2561

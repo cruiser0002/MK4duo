@@ -140,7 +140,7 @@
 // or, in case of cooler, it will switched off.
 // to check that the wiring to the thermistor is not broken.
 // Otherwise this would lead to the heater being powered on all the time.
-#define HEATER_0_MINTEMP 5 // (degC)
+#define HEATER_0_MINTEMP 1 // (degC)
 #define HEATER_1_MINTEMP 5 // (degC)
 #define HEATER_2_MINTEMP 5 // (degC)
 #define HEATER_3_MINTEMP 5 // (degC)
@@ -430,8 +430,8 @@
  *      IT IS HIGHLY RECOMMENDED TO LEAVE THIS OPTION ENABLED!         *
  *                                                                     *
  ***********************************************************************/
-#define PREVENT_COLD_EXTRUSION
-#define EXTRUDE_MINTEMP 170                 // Degree Celsius
+//#define PREVENT_COLD_EXTRUSION
+#define EXTRUDE_MINTEMP 1                 // Degree Celsius
 
 // Prevent a single extrusion longer than EXTRUDE MAXLENGTH.
 // Note: For Bowden Extruders make this large enough to allow load/unload.

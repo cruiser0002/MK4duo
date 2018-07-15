@@ -60,7 +60,7 @@
  *
  * 2400, 9600, 19200, 38400, 57600, 115200, 250000, 500000, 1000000
  */
-#define BAUDRATE 115200
+#define BAUDRATE 250000
 
 /**
  * User-specified version info of this build to display in [Pronterface, etc] terminal window during
@@ -130,6 +130,7 @@
  *****************************************************************************************/
 #define MOTHERBOARD BOARD_RESIN
 //#define MOTHERBOARD BOARD_RAMPS_13_HFB
+//#define MOTHERBOARD BOARD_TEST
 /*****************************************************************************************/
 
 
@@ -161,6 +162,7 @@
 //#define MECHANISM MECH_MAKERARM_SCARA
 //#define MECHANISM MECH_MUVE3D
 #define MECHANISM MECH_RESIN
+//#define MECHANISM MECH_TEST
 /***********************************************************************/
 
 

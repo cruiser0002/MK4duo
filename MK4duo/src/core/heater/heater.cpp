@@ -76,6 +76,9 @@
 
     NOMORE(celsius, maxtemp);
     target_temperature = celsius;
+    #if ENABLED(RESIN)
+      current_temperature = (float)target_temperature;
+    #endif
 
     #if WATCH_THE_HEATER
       start_watching();
